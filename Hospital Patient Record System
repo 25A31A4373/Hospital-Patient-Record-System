@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Patient {
+    int id;
+    char name[30];
+    int age;
+    char disease[30];
+};
+
+void addPatient() {
+    FILE *fp;
+    struct Patient p;
+
+    fp = fopen("patients.txt", "a");
+
+    printf("\nEnter Patient ID: ");
+    scanf("%d", &p.id);
+
+    printf("Enter Patient Name: ");
+    scanf("%s", p.name);
+
+    printf("Enter Patient Age: ");
+    scanf("%d", &p.age);
+
+    printf("Enter Disease: ");
+    scanf("%s", p.disease);
+
+    fwrite(&p, sizeof(p), 1, fp);
+    fclose(fp);
+
+    printf("\nPatient record added successfully!\n");
+}
+
+void viewPatients() {
+    FILE *fp;
+    struct Patient p;
+
+    fp = fopen("patients.txt", "r");
+
+    if (fp == NULL) {
+        printf("\nNo records found.\n");
+        return;
+    }
+
+    printf("\n--- Patient Records ---\n");
+    while (fread(&p, sizeof(p), 1, fp)) {
+        printf("\nPatient ID : %d", p.id);
+        printf("\nName       : %s", p.name);
+        printf("\nAge        : %d", p.age);
+        printf("\nDisease    : %s", p.disease);
+        printf("\n-----------------------");
+    }
+
+    fclose(fp);
+}
+
+int main() {
+    int choice;
+
+    do {
+        printf("\n\nHospital Patient Record System");
+        printf("\n1. Add Patient Record");
+        printf("\n2. View Patient Records");
+        printf("\n3. Exit");
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addPatient();
+                break;
+            case 2:
+                viewPatients();
+                break;
+            case 3:
+                printf("\nThank you! Exiting program.\n");
+                break;
+            default:
+                printf("\nInvalid choice! Try again.\n");
+        }
+    } while (choice != 3);
+
+    return 0;
+}
